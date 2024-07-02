@@ -2,6 +2,7 @@ import Image from "next/image";
 import { fetchDetailPokemonData } from "@/utils/api";
 import Link from "next/link";
 import { PokemonType, getTypeColor } from "@/utils/colorType";
+import Chip from "@/components/Chip/Chip";
 
 interface paramsType {
   params: {
@@ -39,14 +40,19 @@ const DetailPage = async ({ params }: paramsType) => {
             <p className="mt-4">
               속성:{" "}
               {pokemon.types.map((type) => {
-                const bgColor = getTypeColor(type.type.name as PokemonType);
+                // const bgColor = getTypeColor(type.type.name as PokemonType);
                 return (
-                  <span
+                  <Chip
                     key={type.type.name}
-                    className={`${bgColor} text-white px-2 py-1 rounded-full mr-2`}
-                  >
-                    {type.type.korean_name}
-                  </span>
+                    text={type.type.korean_name}
+                    intent={type.type.name as PokemonType}
+                  />
+                  // <span
+                  //   key={type.type.name}
+                  //   className={`${bgColor} text-white px-2 py-1 rounded-full mr-2`}
+                  // >
+                  //   {type.type.korean_name}
+                  // </span>
                 );
               })}
             </p>
