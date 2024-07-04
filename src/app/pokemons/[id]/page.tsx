@@ -1,12 +1,25 @@
 import Image from "next/image";
 import { fetchDetailPokemonData } from "@/utils/api";
 import Link from "next/link";
-import { PokemonType, getTypeColor } from "@/utils/colorType";
+import { PokemonType } from "@/utils/colorType";
 import Chip from "@/components/Chip/Chip";
+import type { Metadata, ResolvingMetadata } from "next";
+import BackButton from "./../../../components/BackButton";
 
 interface paramsType {
   params: {
     id: string;
+  };
+}
+
+export async function generateMetadata({
+  params,
+}: paramsType): Promise<Metadata> {
+  const pokemon = await fetchDetailPokemonData(params.id);
+
+  return {
+    title: pokemon.korean_name,
+    description: `${pokemon.korean_name}의 상세 정보`,
   };
 }
 
@@ -16,12 +29,7 @@ const DetailPage = async ({ params }: paramsType) => {
   return (
     <div className="flex items-center justify-center direction w-full h-dvh">
       <div className="flex flex-col items-center justify-center w-[700px] p-6 border-2 rounded-md">
-        <Link
-          className="font-semibold border-2 border-white p-2 rounded-lg self-start"
-          href="/"
-        >
-          ＜ 뒤로가기
-        </Link>
+        <BackButton />
         <h2 className="text-2xl font-bold mx-auto">
           No.{pokemon.id} {pokemon.korean_name}
         </h2>
@@ -40,19 +48,12 @@ const DetailPage = async ({ params }: paramsType) => {
             <p className="mt-4">
               속성:{" "}
               {pokemon.types.map((type) => {
-                // const bgColor = getTypeColor(type.type.name as PokemonType);
                 return (
                   <Chip
                     key={type.type.name}
                     text={type.type.korean_name}
                     intent={type.type.name as PokemonType}
                   />
-                  // <span
-                  //   key={type.type.name}
-                  //   className={`${bgColor} text-white px-2 py-1 rounded-full mr-2`}
-                  // >
-                  //   {type.type.korean_name}
-                  // </span>
                 );
               })}
             </p>

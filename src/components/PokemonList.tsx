@@ -1,38 +1,21 @@
 "use client";
 import Image from "next/image";
-import { api } from "@/utils/api";
+import { api, fetchDetailPokemonData, fetchPokemonData } from "@/utils/api";
 import Link from "next/link";
 import { Pokemon } from "@/types/pokemonType";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function PokemonList() {
-  // const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
-  // const [loading, setLoading] = useState<boolean>(true); // 로딩 상태 추가
-
   const {
     data: pokemonData,
     isPending,
     error,
-  } = useQuery({
+  } = useQuery<Pokemon[]>({
     queryKey: ["pokemons"],
-    queryFn: () => api.get("/api/pokemons").then((res) => res.data),
+    queryFn: fetchPokemonData,
+    // () => api.get("/api/pokemons").then((res) => res.data),
   });
-
-  // useEffect(() => {
-  //   api
-  //     .get("/api/pokemons")
-  //     .then((res) => {
-  //       setPokemonData(res.data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching Pokemon data:", error);
-  //       setLoading(false);
-  //     });
-  // }, []);
-
-  console.log(pokemonData);
 
   if (isPending) return <div>포켓몬을 불러오는 중...</div>;
   if (error)
