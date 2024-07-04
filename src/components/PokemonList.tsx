@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
-import { api, fetchDetailPokemonData, fetchPokemonData } from "@/utils/api";
+import { fetchPokemonData } from "@/utils/api";
 import Link from "next/link";
-import { Pokemon } from "@/types/pokemonType";
-import { useEffect, useState } from "react";
+import { PokemonListType } from "@/types/pokemonType";
 import { useQuery } from "@tanstack/react-query";
 
 export default function PokemonList() {
@@ -11,11 +10,12 @@ export default function PokemonList() {
     data: pokemonData,
     isPending,
     error,
-  } = useQuery<Pokemon[]>({
+  } = useQuery<PokemonListType[]>({
     queryKey: ["pokemons"],
     queryFn: fetchPokemonData,
-    // () => api.get("/api/pokemons").then((res) => res.data),
   });
+
+  console.log(pokemonData);
 
   if (isPending) return <div>포켓몬을 불러오는 중...</div>;
   if (error)
@@ -25,7 +25,7 @@ export default function PokemonList() {
     <div className="flex flex-col m-4">
       <h1 className="text-center text-2xl font-bold">포켓몬 리스트</h1>
       <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mx-6 my-6">
-        {pokemonData.map((pokemon: Pokemon) => (
+        {pokemonData.map((pokemon) => (
           <li
             key={pokemon.id}
             className="flex flex-col items-center justify-center border-solid border-2 border-gray-300 rounded-lg p-4 cursor-pointer"

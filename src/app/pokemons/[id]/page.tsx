@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { fetchDetailPokemonData } from "@/utils/api";
-import Link from "next/link";
 import { PokemonType } from "@/utils/colorType";
 import Chip from "@/components/Chip/Chip";
 import type { Metadata, ResolvingMetadata } from "next";
