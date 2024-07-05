@@ -5,7 +5,6 @@ import {
 } from "@/types/pokemonType";
 import axios from "axios";
 
-// axios 인스턴스 생성 및 기본 URL 설정
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
