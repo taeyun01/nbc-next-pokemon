@@ -27,7 +27,7 @@ const DetailPage = async ({ params }: paramsType) => {
   const pokemon = await fetchDetailPokemonData(params.id);
 
   return (
-    <div className="flex items-center justify-center direction w-full h-dvh bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 fixed top-0 left-0">
+    <div className="flex items-center justify-center direction w-full h-dvh bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 top-0 left-0">
       <div className="flex flex-col items-center justify-center w-[700px] p-6 border-2 rounded-lg bg-white">
         <div className="flex justify-between w-full items-center">
           <BackButton />

@@ -2,22 +2,44 @@
 import Image from "next/image";
 import { fetchPokemonData } from "@/utils/api";
 import Link from "next/link";
-import { PokemonListType } from "@/types/pokemonType";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import PagiNation from "./PagiNation";
+import { PokemonResponse } from "@/types/pokemonType";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
 
 export default function PokemonList() {
-  const [page, setPage] = useState<number>(1);
-  const pokemonPage: number = 20;
-
   const {
     data: pokemonData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isPending,
     error,
-  } = useQuery<PokemonListType[]>({
+  } = useInfiniteQuery<
+    PokemonResponse,
+    Error,
+    PokemonResponse["data"],
+    string[],
+    number
+  >({
     queryKey: ["pokemons"],
-    queryFn: fetchPokemonData,
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) => fetchPokemonData({ pageParam }),
+    getNextPageParam: (lastPage, _, lastPageParam) => {
+      const nextPage = lastPageParam + 1;
+      return lastPage.hasNextPage ? nextPage : undefined;
+    },
+    select: ({ pages }) => {
+      return pages.flatMap(({ data }) => data);
+    },
+  });
+
+  const { ref } = useInView({
+    threshold: 0,
+    onChange: (inView) => {
+      if (inView && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    },
   });
 
   if (isPending)
@@ -34,24 +56,19 @@ export default function PokemonList() {
       </div>
     );
 
-  const totalPages = Math.ceil(pokemonData.length / pokemonPage);
-  const startIndex = (page - 1) * pokemonPage;
-  const selectedPokemon = Array.from(
-    pokemonData.slice(startIndex, startIndex + pokemonPage)
-  );
   return (
     <div className="flex flex-col p-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
       <h1 className="text-center text-2xl font-bold">포켓몬 리스트</h1>
-      <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mx-6 my-6">
-        {selectedPokemon.map((pokemon) => (
+      <ul className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-6 my-6">
+        {pokemonData.map((pokemon) => (
           <li
             key={pokemon.id}
             className="flex flex-col items-center justify-center border-solid border-2 border-gray-300 rounded-lg p-4 cursor-pointer bg-white"
           >
             <Link href={`/pokemons/${pokemon.id}`}>
-              <h2 className="text-xl font-bold text-center">
+              <strong className="text-xl font-bold text-center">
                 {pokemon.korean_name}
-              </h2>
+              </strong>
               <Image
                 src={pokemon.sprites.front_default}
                 alt={`${pokemon.korean_name} 이미지`}
@@ -64,7 +81,12 @@ export default function PokemonList() {
           </li>
         ))}
       </ul>
-      <PagiNation totalPages={totalPages} page={page} setPage={setPage} />
+      {isFetchingNextPage ? (
+        <div className="text-2xl font-bold text-center flex items-center justify-center">
+          불러오는 중...
+        </div>
+      ) : null}
+      <div ref={ref} />
     </div>
   );
 }

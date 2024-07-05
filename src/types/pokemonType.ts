@@ -1,3 +1,9 @@
+export interface PokemonResponse {
+  data: Pokemon[];
+  totalPages: number;
+  hasNextPage: boolean;
+}
+
 type NameUrlType = Record<"name" | "url", string>;
 
 export interface Pokemon {

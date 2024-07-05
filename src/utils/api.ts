@@ -1,4 +1,8 @@
-import { PokemonDetailType, PokemonListType } from "@/types/pokemonType";
+import {
+  PokemonDetailType,
+  PokemonListType,
+  PokemonResponse,
+} from "@/types/pokemonType";
 import axios from "axios";
 
 // axios 인스턴스 생성 및 기본 URL 설정
@@ -6,8 +10,10 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
-export const fetchPokemonData = async (): Promise<PokemonListType[]> => {
-  const response = await api.get(`/api/pokemons`);
+export const fetchPokemonData = async ({
+  pageParam = 1,
+}): Promise<PokemonResponse> => {
+  const response = await api.get(`/api/pokemons?page=${pageParam}`);
   return response.data;
 };
 
