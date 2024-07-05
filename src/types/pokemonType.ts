@@ -1,5 +1,4 @@
 type NameUrlType = Record<"name" | "url", string>;
-// type NameUrlType = Record<"name" | "url", string> & { korean_name?: string };
 
 export interface Pokemon {
   base_experience: number;

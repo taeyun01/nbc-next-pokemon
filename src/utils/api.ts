@@ -1,13 +1,8 @@
 import { PokemonDetailType, PokemonListType } from "@/types/pokemonType";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
-// axios 인스턴스 생성 및 기본 URL 설정
 export const api = axios.create({
-  baseURL: "http://localhost:3000",
-});
-
-export const detailApi = axios.create({
-  baseURL: "http://localhost:3000/api/pokemons",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 
 export const fetchPokemonData = async (): Promise<PokemonListType[]> => {
@@ -18,17 +13,6 @@ export const fetchPokemonData = async (): Promise<PokemonListType[]> => {
 export const fetchDetailPokemonData = async (
   id: string
 ): Promise<PokemonDetailType> => {
-  const response = await detailApi.get(`/${id}`);
-  return response.data.data;
+  const response = await api.get(`/api/pokemons${id}`);
+  return response.data;
 };
-
-// export const fetchPokemonData = async (
-//   page: number
-// ): Promise<{
-//   data: PokemonListType[];
-//   totalPages: number;
-//   hasNextPage: boolean;
-// }> => {
-//   const response = await axios.get(`/api/pokemons?page=${page}`);
-//   return response.data;
-// };
