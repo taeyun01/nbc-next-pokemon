@@ -1,11 +1,7 @@
 type NameUrlType = Record<"name" | "url", string>;
+// type NameUrlType = Record<"name" | "url", string> & { korean_name?: string };
 
 export interface Pokemon {
-  abilities: {
-    ability: NameUrlType;
-    is_hidden: boolean;
-    slot: number;
-  }[];
   base_experience: number;
   cries: Record<"latest" | "legacy", string>;
   forms: NameUrlType[];
@@ -18,14 +14,6 @@ export interface Pokemon {
   id: number;
   is_default: boolean;
   location_area_encounters: string;
-  moves: {
-    move: NameUrlType;
-    version_group_details: {
-      level_learned_at: number;
-      move_learn_method: NameUrlType;
-      version_group: NameUrlType;
-    }[];
-  }[];
   name: string;
   order: number;
   past_abilities: [];
@@ -69,10 +57,6 @@ export interface Pokemon {
     effort: number;
     stat: NameUrlType;
   }[];
-  types: {
-    slot: number;
-    type: NameUrlType;
-  }[];
   weight: number;
   korean_name: string;
 }
@@ -104,15 +88,15 @@ export interface PokemonListType extends Pokemon {
 }
 
 export interface PokemonDetailType extends Pokemon {
-  abilities: AbilitiesType[] & {
+  abilities: (AbilitiesType & {
     ability: NameUrlType & { korean_name: string };
-  };
-  moves: MovesType[] & {
+  })[];
+  moves: (MovesType & {
     move: NameUrlType & { korean_name: string };
-  };
-  types: TypesType[] & {
+  })[];
+  types: (TypesType & {
     type: NameUrlType & { korean_name: string };
-  };
+  })[];
 }
 
 type SpritesTypes = {

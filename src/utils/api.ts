@@ -11,7 +11,7 @@ export const detailApi = axios.create({
 });
 
 export const fetchPokemonData = async (): Promise<PokemonListType[]> => {
-  const response = await api.get("/api/pokemons");
+  const response = await api.get(`/api/pokemons`);
   return response.data;
 };
 
@@ -19,5 +19,16 @@ export const fetchDetailPokemonData = async (
   id: string
 ): Promise<PokemonDetailType> => {
   const response = await detailApi.get(`/${id}`);
-  return response.data;
+  return response.data.data;
 };
+
+// export const fetchPokemonData = async (
+//   page: number
+// ): Promise<{
+//   data: PokemonListType[];
+//   totalPages: number;
+//   hasNextPage: boolean;
+// }> => {
+//   const response = await axios.get(`/api/pokemons?page=${page}`);
+//   return response.data;
+// };

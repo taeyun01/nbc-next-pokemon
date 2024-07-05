@@ -4,6 +4,7 @@ import { PokemonType } from "@/utils/colorType";
 import Chip from "@/components/Chip/Chip";
 import type { Metadata, ResolvingMetadata } from "next";
 import BackButton from "./../../../components/BackButton";
+import Audio from "@/components/Audio";
 
 interface paramsType {
   params: {
@@ -26,9 +27,12 @@ const DetailPage = async ({ params }: paramsType) => {
   const pokemon = await fetchDetailPokemonData(params.id);
 
   return (
-    <div className="flex items-center justify-center direction w-full h-dvh">
-      <div className="flex flex-col items-center justify-center w-[700px] p-6 border-2 rounded-md">
-        <BackButton />
+    <div className="flex items-center justify-center direction w-full h-dvh bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 fixed top-0 left-0">
+      <div className="flex flex-col items-center justify-center w-[700px] p-6 border-2 rounded-lg bg-white">
+        <div className="flex justify-between w-full items-center">
+          <BackButton />
+          <Audio src={pokemon.cries.latest} />
+        </div>
         <h2 className="text-2xl font-bold mx-auto">
           No.{pokemon.id} {pokemon.korean_name}
         </h2>
@@ -64,14 +68,13 @@ const DetailPage = async ({ params }: paramsType) => {
             {pokemon.moves.slice(0, 50).map((mon) => (
               <span
                 key={mon.move.name}
-                className="bg-blue-500 text-white px-2 py-1 rounded-full"
+                className={`bg-blue-400 text-white px-2 py-1 rounded-full`}
               >
                 {mon.move.korean_name}
               </span>
             ))}
           </div>
         </div>
-        <div className="mt-5"></div>
       </div>
     </div>
   );
