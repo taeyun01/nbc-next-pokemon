@@ -36,9 +36,9 @@ export default function PokemonList() {
 
   const totalPages = Math.ceil(pokemonData.length / pokemonPage);
   const startIndex = (page - 1) * pokemonPage;
-  const selectedPokemon = pokemonData
-    .slice(startIndex, startIndex + pokemonPage)
-    .map((pokemon) => ({ ...pokemon }));
+  const selectedPokemon = Array.from(
+    pokemonData.slice(startIndex, startIndex + pokemonPage)
+  );
   return (
     <div className="flex flex-col p-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
       <h1 className="text-center text-2xl font-bold">포켓몬 리스트</h1>
